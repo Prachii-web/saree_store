@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="hero">
+    <h2>Hello, {{ user.name }} 👋</h2>
+    <h3>Your Orders:</h3>
+
+    {% if orders %}
+        <div style="display:grid; gap:20px; max-width:800px; margin:auto;">
+            {% for order in orders %}
+            <div style="border:1px solid #d4af37; border-radius:12px; padding:15px; display:flex; gap:15px; align-items:center;">
+                <img src="{{ url_for('static', filename='uploads/' + order['image']) }}" style="width:100px; height:100px; object-fit:cover; border-radius:8px;">
+                <div>
+                    <h4>{{ order.product_name }}</h4>
+                    <p>Price: ₹{{ order.price }}</p>
+                    <p>Quantity: 1</p>
+                    <p>Ordered on: {{ order.date }}</p>
+                    <p>Shipping to: {{ order.address }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align:center; margin-top:20px;">You haven't placed any orders yet 😔</p>
+    {% endif %}
+</section>
+
+{% endblock %}

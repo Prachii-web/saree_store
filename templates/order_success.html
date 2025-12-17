@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>🎉 Thank You, {{ name }}!</h2>
+    <p>Your order for <strong>{{ product['name'] }}</strong> has been placed successfully.</p>
+    <p>We’ll contact you soon for delivery details 📦</p>
+
+    <a href="{{ url_for('index') }}" class="btn">🏠 Back to Home</a>
+</div>
+{% endblock %}

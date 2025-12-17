@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="max-width:700px; margin:40px auto; background:white; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+    <h2 style="text-align:center; margin-bottom:20px;">📩 Your Messages</h2>
+
+    {% if messages %}
+        {% for m in messages %}
+        <div style="padding:15px; border-bottom:1px solid #ddd;">
+            <p><strong>Product:</strong> {{ m.product_name }}</p>
+            <p><strong>Admin Reply:</strong> {{ m.admin_reply }}</p>
+            <p style="font-size:13px; color:gray;">{{ m.date }}</p>
+        </div>
+        {% endfor %}
+    {% else %}
+    <p style="text-align:center;">No messages yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

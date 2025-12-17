@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2 class="title">💌 Customer Enquiries</h2>
+
+    <table class="enquiry-table">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+        </tr>
+        {% for enquiry in enquiries %}
+        <tr>
+            <td>{{ enquiry['id'] }}</td>
+            <td>{{ enquiry['name'] }}</td>
+            <td>{{ enquiry['email'] }}</td>
+            <td>{{ enquiry['message'] }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">No enquiries yet.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

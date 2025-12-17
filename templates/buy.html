@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>🛒 Buy {{ product['name'] }}</h2>
+    <img src="{{ url_for('static', filename='uploads/' + product['image']) }}" 
+         alt="{{ product['name'] }}" class="product-img">
+    <p><strong>Price:</strong> ₹{{ product['price'] }}</p>
+
+    <form method="POST" class="contact-form">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="text" name="address" placeholder="Delivery Address" required>
+        <input type="text" name="contact" placeholder="Contact Number" required>
+        <button type="submit" class="btn">Place Order</button>
+    </form>
+</div>
+{% endblock %}

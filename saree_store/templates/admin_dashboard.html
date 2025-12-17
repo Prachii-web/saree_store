@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+/* ===============================
+       ADMIN DASHBOARD UI
+   Clean • Professional • Premium
+================================*/
+
+.container{
+    max-width: 1100px;
+    margin:40px auto;
+    padding:25px 35px;
+    background:#fff8f2;
+    border-radius:12px;
+    box-shadow:0 6px 20px rgba(0,0,0,.08);
+    font-family:"Poppins",sans-serif;
+}
+
+/* Heading */
+.title{
+    text-align:center;
+    font-size:35px;
+    font-weight:800;
+    margin-bottom:35px;
+    color:#4b2c20;
+}
+
+/* Section title */
+.dashboard-section{
+    padding:20px 5px;
+    margin-bottom:35px;
+}
+.dashboard-section h3{
+    color:#402318;
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:15px;
+}
+
+/* Add Product Button */
+.btn{
+    background:#9e4f33;
+    color:white;
+    padding:10px 20px;
+    border-radius:6px;
+    font-weight:600;
+    text-decoration:none;
+    display:inline-block;
+    margin-bottom:20px;
+    transition:.3s;
+}
+.btn:hover{
+    background:#7c3a23;
+    box-shadow:0 4px 12px rgba(0,0,0,.2);
+}
+
+/* Tables */
+.styled-table{
+    width:100%;
+    border-collapse:collapse;
+    box-shadow:0 4px 18px rgba(0,0,0,.08);
+    background:white;
+    border-radius:8px;
+    overflow:hidden;
+    font-size:15px;
+}
+
+/* Table Header */
+.styled-table thead{
+    background:#f2d1b3;
+}
+.styled-table thead tr th{
+    padding:12px;
+    font-weight:700;
+    color:#4b2c20;
+}
+
+/* Table Body */
+.styled-table tbody tr{
+    border-bottom:1px solid #f0e5dd;
+    transition:.25s;
+}
+.styled-table tbody tr:hover{
+    background:#fff3e7;
+    transform:scale(1.01);
+}
+
+.styled-table td{
+    padding:12px;
+    color:#3f2a1e;
+}
+
+/* Image inside table */
+.styled-table img{
+    border-radius:6px;
+    box-shadow:0 0 6px rgba(0,0,0,.15);
+}
+
+/* Divider lines modern look */
+hr{
+    border:none;
+    height:1px;
+    background:#d9b89e;
+    margin:35px 0;
+}
+
+/* Empty message */
+p{
+    font-size:16px;
+    color:#6d4b3a;
+    font-weight:500;
+}
+</style>
+
+
+<div class="container">
+    <h2 class="title">🧵 Admin Dashboard</h2>
+
+    <!-- 🛍️ PRODUCT MANAGEMENT -->
+    <section class="dashboard-section">
+        <h3>🛍️ Product Management</h3>
+        <a href="{{ url_for('add_product') }}" class="btn">➕ Add New Product</a>
+
+        {% if products %}
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product['id'] }}</td>
+                    <td>
+                        {% if product['image'] %}
+                        <img src="{{ url_for('static', filename='uploads/' + product['image']) }}" width="80">
+                        {% else %}
+                        No image
+                        {% endif %}
+                    </td>
+                    <td>{{ product['name'] }}</td>
+                    <td>₹{{ product['price'] }}</td>
+                    <td>{{ product['description'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No products available yet.</p>
+        {% endif %}
+    </section>
+
+    <hr>
+
+    <!-- 📩 CUSTOMER ENQUIRIES -->
+    <section class="dashboard-section">
+        <h3>📩 Customer Enquiries</h3>
+        {% if enquiries %}
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in enquiries %}
+                <tr>
+                    <td>{{ e['id'] }}</td>
+                    <td>{{ e['name'] }}</td>
+                    <td>{{ e['email'] }}</td>
+                    <td>{{ e['message'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No enquiries yet.</p>
+        {% endif %}
+    </section>
+
+    <hr>
+
+    <!-- 💸 ORDERS MANAGEMENT -->
+    <section class="dashboard-section">
+        <h3>💸 Customer Orders</h3>
+        {% if orders %}
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Address</th>
+                    <th>Contact</th>
+                    <th>Product Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in orders %}
+                <tr>
+                    <td>{{ o['id'] }}</td>
+                    <td>{{ o['customer_name'] }}</td>
+                    <td>{{ o['address'] }}</td>
+                    <td>{{ o['contact'] }}</td>
+                    <td>{{ o['product_name'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No orders yet.</p>
+        {% endif %}
+    </section>
+
+</div>
+
+{% endblock %}

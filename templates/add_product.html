@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2 class="title">➕ Add New Saree</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="contact-form">
+        <input type="text" name="name" placeholder="Saree Name" required>
+        <input type="number" name="price" placeholder="Price (₹)" step="0.01" required>
+        <textarea name="description" placeholder="Description" rows="4" required></textarea>
+        <input type="file" name="image" accept="image/*" required>
+        <button type="submit" class="btn">Add Saree</button>
+    </form>
+</div>
+{% endblock %}

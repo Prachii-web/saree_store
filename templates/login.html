@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+/* Center the form */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    background: linear-gradient(to right, #fdf6f0, #fff);
+    color: #42291f;
+    padding: 50px 20px;
+}
+
+/* Form styling */
+form {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-family: "Playfair Display", serif;
+}
+
+form label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+form input {
+    padding: 12px 15px;
+    border: 2px solid #d4af37;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+form input:focus {
+    outline: none;
+    border-color: #e85ba5;
+    box-shadow: 0 0 5px rgba(232,91,165,0.5);
+}
+
+form button {
+    padding: 12px 0;
+    border: none;
+    background: #e85ba5;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+form button:hover {
+    background: linear-gradient(135deg, #e85ba5, #f7c5e6);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(232,91,165,0.3);
+}
+
+.hero h2 {
+    margin-bottom: 25px;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.hero p {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.hero a {
+    color: #e85ba5;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.hero a:hover {
+    text-decoration: underline;
+}
+</style>
+
+<section class="hero">
+    <h2>Login to Your Account</h2>
+    <form method="POST" action="{{ url_for('login') }}">
+        <label>Name / Email</label>
+        <input type="text" name="email" placeholder="Enter email" required>
+        
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter password" required>
+        
+        <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+</section>
+
+{% endblock %}

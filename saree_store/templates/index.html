@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+/* ----------  COLOR SYSTEM (core palette) ---------- */
+:root {
+    --bg: #fdf6f0;          /* Soft creamy beige */
+    --text-dark: #42291f;    /* Rich chocolate brown */
+    --gold: #d4af37;         /* Metallic gold accent */
+    --pink: #e85ba5;         /* Brand signature */
+    --white: #ffffff;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+    background: linear-gradient(to right, rgba(253,246,240,0.95), rgba(255,255,255,0.9)),
+                url('/static/banner.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 120px 60px;
+    text-align: left;
+    color: var(--text-dark);
+}
+.hero h1 {
+    font-size: 3.2rem;
+    font-family: "Playfair Display", serif;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+.hero p {
+    font-size: 1.2rem;
+    width: 50%;
+    line-height: 1.6;
+}
+.hero-buttons {
+    margin-top: 25px;
+}
+.hero-buttons a {
+    padding: 14px 38px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-family: "Playfair Display", serif;
+    font-weight: 600;
+    text-decoration: none;
+    transition: .35s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+.btn-main {
+    background: var(--pink);
+    color: white;
+    border: 2px solid var(--pink);
+}
+.btn-main:hover {
+    background: linear-gradient(135deg,#e85ba5,#f7c5e6);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(232,91,165,0.35);
+}
+.btn-alt {
+    background: transparent;
+    color: var(--text-dark);
+    border: 2px solid var(--gold);
+}
+.btn-alt:hover {
+    background: var(--gold);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(212,167,77,0.35);
+}
+
+/* ---------- CATEGORY TABS ---------- */
+.categories {
+    background: var(--white);
+    text-align: center;
+    padding: 70px 0 40px 0;
+}
+.categories h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 2.2rem;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+}
+.cat-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.cat-tab {
+    padding: 12px 28px;
+    border-radius: 50px;
+    background: var(--bg);
+    border: 2px solid var(--gold);
+    font-family: "Playfair Display", serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: .35s;
+}
+.cat-tab:hover {
+    background: var(--pink);
+    color: var(--white);
+    border-color: var(--pink);
+}
+.cat-tab.active {
+    background: var(--pink);
+    color: var(--white);
+    border-color: var(--pink);
+    box-shadow: 0 4px 12px rgba(232,91,165,0.25);
+}
+
+/* ---------- FEATURED PRODUCTS ---------- */
+.featured {
+    background: var(--bg);
+    padding: 80px 0;
+    text-align: center;
+}
+.featured h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 2.3rem;
+    color: var(--text-dark);
+    margin-bottom: 45px;
+}
+.product-grid {
+    width: 92%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    gap: 25px;
+    margin: auto;
+}
+.product-card {
+    background: white;
+    padding: 22px;
+    border-radius: 16px;
+    border: 1px solid #e8ddcc;
+    box-shadow: 0 0 8px rgba(0,0,0,.05);
+    transition: .35s, opacity .4s;
+    opacity: 0;
+    display: none; /* hidden initially */
+}
+.product-card.visible {
+    display: block;
+    opacity: 1;
+}
+.product-card img {
+    width: 100%;
+    height: 290px;
+    object-fit: cover;
+    border-radius: 14px;
+}
+.product-card h3 {
+    font-size: 1.2rem;
+    margin: 10px 0 6px;
+    font-family: "Playfair Display", serif;
+}
+.product-card span { color: var(--gold); font-size: 1.2rem; font-weight: 600; }
+.buy-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 26px;
+    background: var(--pink);
+    color: white;
+    border-radius: 50px;
+    font-size: .95rem;
+    transition: .3s;
+}
+.buy-btn:hover { background: var(--gold); }
+
+/* ---------- STORY ---------- */
+.story {
+    padding: 90px 15%;
+    text-align: center;
+    background: var(--white);
+}
+.story h2 {
+    font-family: "Playfair Display";
+    font-size: 2.3rem;
+    margin-bottom: 20px;
+    color: var(--text-dark);
+}
+.story p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #5e4e47;
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+    background: linear-gradient(to top, #e8d5b7, #fdf6f0);
+    padding: 60px 15%;
+    margin-top: 70px;
+    text-align: center;
+    color: var(--text-dark);
+}
+.footer h4 {
+    font-size: 1.4rem;
+    font-family: "Playfair Display";
+    margin-bottom: 12px;
+}
+.footer p,a { font-size: .95rem; color: #5c4b43; }
+.copy { margin-top: 35px; font-size: .9rem; color: #42291f; }
+</style>
+
+<!-- ====================== HTML ====================== -->
+<section class="hero">
+    <h1>Timeless Sarees, Woven with Heritage</h1>
+    <p>SareeVerse brings hand-picked premium sarees crafted with tradition, elegance and cultural artistry — made for women who wear grace like jewellery.</p>
+    <div class="hero-buttons">
+        <a href="#products" class="btn-main">Shop Now</a>
+        <a href="{{ url_for('contact') }}" class="btn-alt">Enquire</a>
+    </div>
+</section>
+
+<section class="categories">
+    <h2>Explore Our Curation</h2>
+    <div class="cat-tabs">
+    <a class="cat-tab active" href="#" data-cat="all">All</a>
+    <a class="cat-tab" href="#" data-cat="banarasi">Banarasi</a>
+    <a class="cat-tab" href="#" data-cat="kanjivaram">Kanjivaram</a>
+    <a class="cat-tab" href="#" data-cat="silk">Silk</a>
+    <a class="cat-tab" href="#" data-cat="wedding">Wedding</a>
+    <a class="cat-tab" href="#" data-cat="handloom">Handloom</a>
+    <a class="cat-tab" href="#" data-cat="cotton">Cotton</a>
+
+</div>
+
+</section>
+
+<section id="products" class="featured">
+    <h2>New Arrivals</h2>
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card" data-category="{{ product.category|lower }}">
+            <img src="{{ url_for('static', filename='uploads/' + product['image']) }}">
+            <h3>{{ product.name }}</h3>
+            <span>₹{{ product.price }}</span><br>
+            <a class="buy-btn" href="{{ url_for('buy_product', product_id=product['id']) }}">Buy Now</a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="story">
+    <h2>Our Story</h2>
+    <p>
+        A saree is more than a garment —  
+        it’s poetry hand-woven into six yards,  
+        stitched with memories, tradition, and a woman’s grace.  
+        At SareeVerse, we preserve heritage through every weave,  
+        blending classical beauty with modern elegance.
+    </p>
+</section>
+
+<footer class="footer">
+    <h4>SareeVerse</h4>
+    <p>Luxury sarees curated for timeless elegance.</p>
+    <hr style="margin:20px 0;border:0;border-top:1px solid var(--gold);">
+    <p class="copy">© 2025 SareeVerse — Crafted in India with Love</p>
+</footer>
+
+<!-- ====================== JS for Category Fade Filter ====================== -->
+<script>
+const tabs = document.querySelectorAll('.cat-tab');
+const products = document.querySelectorAll('.product-card');
+
+function showProducts(category){
+    products.forEach(p => {
+        if(category === 'all' || p.dataset.category === category){
+            p.classList.add('visible');
+        } else {
+            p.classList.remove('visible');
+        }
+    });
+}
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+        e.preventDefault(); // prevent default link behavior
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const cat = tab.dataset.cat;
+        showProducts(cat);
+        document.getElementById('products').scrollIntoView({behavior: 'smooth'});
+    });
+});
+
+// Initially show all
+showProducts('all');
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h2>Complete Your Payment</h2>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <form action="/verify_payment" method="POST">
+      <script
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          data-key="{{ key_id }}"
+          data-amount="{{ amount }}"
+          data-currency="INR"
+          data-order_id="{{ order_id }}"
+          data-buttontext="Pay with Razorpay"
+          data-name="Saree Store"
+          data-description="Test Transaction"
+          data-theme.color="#F37254"
+      ></script>
+      <input type="hidden" name="amount" value="{{ amount }}">
+  </form>
+</div>
+{% endblock %}

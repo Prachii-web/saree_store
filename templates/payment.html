@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h2>💳 Make a Payment</h2>
+  <form action="{{ url_for('payment') }}" method="POST">
+      <label>Customer Name:</label>
+      <input type="text" name="customer_name" required>
+
+      <label>Amount (₹):</label>
+      <input type="number" name="amount" required>
+
+      <button type="submit">Proceed to Pay</button>
+  </form>
+</div>
+{% endblock %}

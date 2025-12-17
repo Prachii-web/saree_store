@@ -1,0 +1,12 @@
+<h2 style="text-align:center;">{{ cat|capitalize }} Sarees</h2>
+
+<div class="product-grid">
+    {% for s in products %}
+    <div class="product-card">
+        <img src="{{ s[3] }}" style="width:100%;height:300px;">
+        <h3>{{ s[1] }}</h3>
+        <span>₹{{ s[2] }}</span><br>
+        <a class="buy-btn" href="/buy/{{ s[0] }}">Buy Now</a>
+    </div>
+    {% endfor %}
+</div>

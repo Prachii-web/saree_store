@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Our Sarees</title>
+</head>
+<body>
+    <h1>Available Sarees</h1>
+    <div class="products">
+        {% for product in products %}
+        <div class="product-card">
+            <img src="{{ product[4] }}" alt="{{ product[1] }}" width="200">
+            <h3>{{ product[1] }}</h3>
+            <p>{{ product[3] }}</p>
+            <p>Price: ₹{{ product[2] }}</p>
+            <p>Category: {{ product[5] }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
