@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 import sqlite3
 import razorpay
 from datetime import datetime
+import uuid
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -100,16 +102,20 @@ def buy_product(product_id):
         return redirect(url_for('login'))
 
     conn = get_db_connection()
-    product = conn.execute("SELECT * FROM products WHERE id = ?", (product_id,)).fetchone()
+    product = conn.execute(
+        "SELECT * FROM products WHERE id = ?", (product_id,)
+    ).fetchone()
 
     if request.method == 'POST':
         name = request.form['name']
         address = request.form['address']
         contact = request.form['contact']
 
+        # 🟢 Create order
         conn.execute("""
-            INSERT INTO orders (user_id, product_id, customer_name, address, contact)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO orders
+            (user_id, product_id, customer_name, address, contact, status)
+            VALUES (?, ?, ?, ?, ?, 'Pending')
         """, (
             session['user_id'],
             product_id,
@@ -117,14 +123,96 @@ def buy_product(product_id):
             address,
             contact
         ))
+
+        # ✅ order_id exists ONLY here
+        order_id = conn.execute(
+            "SELECT last_insert_rowid()"
+        ).fetchone()[0]
+
         conn.commit()
         conn.close()
 
-        flash("✅ Order placed successfully!", "success")
-        return redirect(url_for('user_dashboard'))
+        # ✅ Redirect ONLY after order is created
+        return redirect(url_for('payment', order_id=order_id))
 
     conn.close()
     return render_template('buy.html', product=product)
+
+
+
+
+@app.route('/payment/<int:order_id>', methods=['GET', 'POST'])
+def payment(order_id):
+    if 'user_id' not in session:
+        flash("Please login first.", "warning")
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+
+    # Fetch order + product details
+    order = conn.execute("""
+        SELECT o.id, o.customer_name, o.address, o.contact, p.name AS product_name,
+               p.quantity, pay.status AS payment_status, pay.payment_mode, o.user_id, o.product_id
+        FROM orders o
+        JOIN products p ON o.product_id = p.id
+        LEFT JOIN payments pay ON o.id = pay.order_id
+        WHERE o.id = ?
+    """, (order_id,)).fetchone()
+
+    if not order:
+        flash("Invalid order.", "danger")
+        conn.close()
+        return redirect(url_for('user_dashboard'))
+
+    if request.method == 'POST':
+        amount = request.form['amount']
+        mode = request.form['mode']
+        payment_id = str(uuid.uuid4())
+
+        try:
+            # Save payment
+            conn.execute("""
+                INSERT INTO payments (payment_id, order_id, customer_name, amount, payment_mode, status)
+                VALUES (?, ?, ?, ?, ?, 'Paid')
+            """, (
+                payment_id,
+                order_id,
+                order['customer_name'],
+                amount,
+                mode
+            ))
+
+            # Update order status
+            conn.execute("""
+                UPDATE orders SET order_status = 'Paid' WHERE id = ?
+            """, (order_id,))
+
+            # Reduce stock
+            if order['quantity'] > 0:
+                conn.execute("""
+                    UPDATE products SET quantity = quantity - 1 WHERE id = ?
+                """, (order['product_id'],))
+            else:
+                flash("⚠️ Product out of stock!", "danger")
+                conn.rollback()
+                conn.close()
+                return redirect(url_for('user_dashboard'))
+
+            conn.commit()
+            flash("💰 Payment successful!", "success")
+        except Exception as e:
+            conn.rollback()
+            flash(f"Payment failed: {e}", "danger")
+        finally:
+            conn.close()
+
+        return redirect(url_for('user_dashboard'))
+
+    # GET request renders payment page
+    conn.close()
+    return render_template('payment.html', order=order)
+
+
 
 # ---------- CUSTOMER DASHBOARD ----------
 @app.route('/dashboard', endpoint='user_dashboard')
@@ -207,10 +295,17 @@ def admin_dashboard():
     products = conn.execute('SELECT * FROM products').fetchall()
     enquiries = conn.execute('SELECT * FROM enquiries').fetchall()
     orders = conn.execute("""
-    SELECT o.id, o.user_id, o.customer_name, o.address, o.contact, p.name AS product_name, o.order_status, o.delivery_date
+    SELECT o.id, o.user_id, o.customer_name, o.address, o.contact,
+        p.name AS product_name,
+        COALESCE(pay.status, 'Pending') AS payment_status,
+        pay.payment_mode,
+        o.delivery_date
     FROM orders o
     JOIN products p ON o.product_id = p.id
-""").fetchall()
+    LEFT JOIN payments pay ON o.id = pay.order_id
+    ORDER BY o.id DESC
+    """).fetchall()
+
 
     payments = conn.execute('SELECT * FROM payments').fetchall()
     conn.close()

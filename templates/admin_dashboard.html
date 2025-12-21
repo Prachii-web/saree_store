@@ -186,53 +186,64 @@ th, td {
         {% endif %}
     </div>
 
-    <!-- ORDERS -->
-    <div id="orders" class="tab-section">
-        <h3>Customer Orders</h3>
+<!-- ORDERS -->
+<div id="orders" class="tab-section">
+    <h3>Customer Orders</h3>
 
-        {% if orders %}
-        <div class="table-box">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th><th>Customer</th><th>Address</th>
-                        <th>Contact</th><th>Product</th>
-                        <th>Message</th><th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for o in orders %}
-                    <tr>
-                        <td>{{ o.id }}</td>
-                        <td>{{ o.customer_name }}</td>
-                        <td>{{ o.address }}</td>
-                        <td>{{ o.contact }}</td>
-                        <td>{{ o.product_name }}</td>
-                        <td>
-                            <form method="POST" action="{{ url_for('admin_send_order_message') }}">
-                                <input type="hidden" name="user_id" value="{{ o.user_id }}">
-                                <input type="hidden" name="order_id" value="{{ o.id }}">
-                                <textarea name="message" required></textarea>
-                                <button class="update-btn stock-update">Send</button>
-                            </form>
-                        </td>
-                        <td>
-                            <a class="delete-btn"
-                               href="{{ url_for('delete_order', order_id=o.id) }}"
-                               onclick="return confirm('Delete this order?');">
-                               Delete
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <p>No orders yet.</p>
-        {% endif %}
+    {% if orders %}
+    <div class="table-box">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Address</th>
+                    <th>Contact</th>
+                    <th>Product</th>
+                    <th>Payment Status</th>
+                    <th>Payment Mode</th>
+                    <th>Message</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in orders %}
+                <tr>
+                    <td>{{ o.id }}</td>
+                    <td>{{ o.customer_name }}</td>
+                    <td>{{ o.address }}</td>
+                    <td>{{ o.contact }}</td>
+                    <td>{{ o.product_name }}</td>
+
+                    <!-- Payment Info -->
+                    <td>{{ o.payment_status if o.payment_status else 'Pending' }}</td>
+                    <td>{{ o.payment_mode if o.payment_mode else '-' }}</td>
+
+                    <td>
+                        <form method="POST" action="{{ url_for('admin_send_order_message') }}">
+                            <input type="hidden" name="user_id" value="{{ o.user_id }}">
+                            <input type="hidden" name="order_id" value="{{ o.id }}">
+                            <textarea name="message" required></textarea>
+                            <button class="update-btn stock-update">Send</button>
+                        </form>
+                    </td>
+                    <td>
+                        <a class="delete-btn"
+                           href="{{ url_for('delete_order', order_id=o.id) }}"
+                           onclick="return confirm('Delete this order?');">
+                           Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    {% else %}
+    <p>No orders yet.</p>
+    {% endif %}
 </div>
+
 
 <script>
 function openTab(tabName, btn) {

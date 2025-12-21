@@ -1,15 +1,72 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container">
-  <h2>💳 Make a Payment</h2>
-  <form action="{{ url_for('payment') }}" method="POST">
-      <label>Customer Name:</label>
-      <input type="text" name="customer_name" required>
+    <h2>💳 Payment for {{ order['product_name'] }}</h2>
 
-      <label>Amount (₹):</label>
-      <input type="number" name="amount" required>
+    <p class="price"><strong>Amount to Pay:</strong> ₹{{ order['price'] }}</p>
 
-      <button type="submit">Proceed to Pay</button>
-  </form>
+    <form method="POST" class="contact-form">
+        <label for="mode">Payment Mode</label>
+        <select name="mode" id="mode" required>
+            <option value="UPI">UPI</option>
+            <option value="Card">Card</option>
+            <option value="Cash">Cash</option>
+        </select>
+
+        <!-- Hidden amount -->
+        <input type="hidden" name="amount" value="{{ order['price'] }}">
+
+        <button type="submit" class="btn">Pay Now</button>
+    </form>
 </div>
+
+<style>
+/* Match your theme from buy page */
+.container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.price {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.contact-form select,
+.contact-form input[type="hidden"] {
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+}
+
+.btn {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #22c55e; /* green like your buy buttons */
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #16a34a;
+}
+</style>
 {% endblock %}
